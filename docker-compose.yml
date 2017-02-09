@@ -1,0 +1,29 @@
+version: '2'
+services:
+  solr:
+    image: solr
+    ports:
+     - "8983:8983"
+    volumes:
+      - data:/opt/solr/server/solr/mycores
+    entrypoint:
+      - docker-entrypoint.sh
+      - solr-precreate
+      - mycore
+  moodle:
+    image: arvindr226/moodle
+    ports:
+     - 80:80
+    links:
+     - db
+     - solr
+  db:
+    image: mariadb
+    environment:
+     - MYSQL_ROOT_PASSWORD=admin
+     - MYSQL_DATABASE=moodle
+
+
+volumes:
+  data:
+
